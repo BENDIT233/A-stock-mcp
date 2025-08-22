@@ -138,6 +138,52 @@ uv venv
 uv sync
 ```
 
+## 🚀 Smithery 部署
+
+本项目已配置支持在 [Smithery](https://smithery.ai) 上进行容器化部署。
+
+### 部署步骤
+
+1. **准备代码库**
+   - 确保代码已推送到 GitHub 仓库
+   - 确认 `smithery.yaml` 和 `Dockerfile` 文件存在
+
+2. **连接 Smithery**
+   - 访问 [Smithery Dashboard](https://smithery.ai/dashboard)
+   - 连接你的 GitHub 账户
+   - 选择对应的仓库
+
+3. **配置部署**
+   - 在部署选项卡中，Smithery 会自动检测配置
+   - 确保运行时设置为 "container"
+   - 配置必要的环境变量（如 API keys）
+
+4. **部署服务器**
+   - 点击 "Deploy" 按钮开始构建和部署
+   - 等待构建完成，查看部署日志
+
+### 配置说明
+
+- **运行时**: Container (Docker)
+- **构建路径**: 当前目录
+- **Dockerfile**: 使用项目根目录的 Dockerfile
+- **HTTP 端口**: 自动分配，通过 PORT 环境变量传递
+- **配置参数**: 支持 API Key 等配置参数
+
+### 本地测试
+
+要测试 HTTP 模式，可以设置 PORT 环境变量：
+
+```bash
+# Windows
+set PORT=8000
+python mcp_server.py
+
+# Linux/macOS
+export PORT=8000
+python mcp_server.py
+```
+
 ## 使用：在 MCP 客户端中配置服务器
 
 在支持 MCP 的客户端（如 VS Code 插件、CherryStudio 等）中，你需要配置如何启动此服务器。 **推荐使用 `uv`**。

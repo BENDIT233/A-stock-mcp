@@ -57,7 +57,16 @@ register_analysis_tools(app, active_data_source)
 
 # --- Main Execution Block ---
 if __name__ == "__main__":
-    logger.info(
-        f"Starting A-Share MCP Server via stdio... Today is {current_date}")
-    # Run the server using stdio transport, suitable for MCP Hosts like Claude Desktop
-    app.run(transport='stdio')
+    import os
+    import uvicorn
+    
+    # Check if running in HTTP mode (for Smithery deployment)
+    if os.environ.get("PORT"):
+        port = int(os.environ.get("PORT"))
+        logger.info(f"Starting A-Share MCP Server on port {port}... Today is {current_date}")
+        # Run the server using HTTP transport for Smithery deployment
+        uvicorn.run(app, host="0.0.0.0", port=port)
+    else:
+        logger.info(f"Starting A-Share MCP Server via stdio... Today is {current_date}")
+        # Run the server using stdio transport, suitable for MCP Hosts like Claude Desktop
+        app.run(transport='stdio')
