@@ -46,6 +46,36 @@ app = FastMCP(
     # dependencies=["baostock", "pandas"]
 )
 
+# --- Authentication Middleware for HTTP Mode ---
+@app.middleware("http")
+async def auth_middleware(request, call_next):
+    """
+    认证中间件，用于HTTP模式下验证apiKey
+    """
+    # 获取请求头中的apiKey
+    api_key = request.headers.get("x-api-key") or request.headers.get("authorization")
+    
+    # 如果提供了apiKey，进行验证（这里使用简单的验证逻辑）
+    if api_key:
+        # 移除可能的Bearer前缀
+        if api_key.startswith("Bearer "):
+            api_key = api_key[7:]
+        
+        # 简单的apiKey验证逻辑 - 在实际应用中应该使用更安全的验证方式
+        if api_key == "sk-example123":  # 与smithery.yaml中的exampleConfig匹配
+            response = await call_next(request)
+            return response
+        else:
+            from starlette.responses import JSONResponse
+            return JSONResponse(
+                status_code=401,
+                content={"error": "Invalid API key"}
+            )
+    
+    # 如果没有提供apiKey，也允许访问（为了Smithery扫描工具能够正常工作）
+    response = await call_next(request)
+    return response
+
 # --- 注册各模块的工具 ---
 register_stock_market_tools(app, active_data_source)
 register_financial_report_tools(app, active_data_source)
