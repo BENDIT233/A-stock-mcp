@@ -33,7 +33,7 @@ current_date = datetime.now().strftime("%Y-%m-%d")
 
 # --- FastMCP App Initialization ---
 app = FastMCP(
-    server_name="a_share_data_provider",
+    name="a_share_data_provider",
     description=f"""今天是{current_date}。提供中国A股市场数据分析工具。此服务提供客观数据分析，用户需自行做出投资决策。数据分析基于公开市场信息，不构成投资建议，仅供参考。
 
 ⚠️ 重要说明:
